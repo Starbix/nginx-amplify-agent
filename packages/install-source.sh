@@ -4,7 +4,7 @@ pip_url="https://bootstrap.pypa.io/get-pip.py"
 agent_url="https://github.com/nginxinc/nginx-amplify-agent"
 agent_conf_path="/etc/amplify-agent"
 agent_conf_file="${agent_conf_path}/agent.conf"
-nginx_conf_file="/etc/nginx/nginx.conf"
+nginx_conf_file="/nginx/conf/nginx.conf"
 
 set -e
 
