@@ -122,117 +122,22 @@ else
     fi
 fi
 
-if [ -n "$API_KEY" ]; then
-    api_key=$API_KEY
-else
-    echo " What's your API key? Please check the docs and the UI."
-    echo ""
-    printf " Enter your API key: "
-    read api_key
-    echo ""
-fi
-
 if uname -m | grep "_64" >/dev/null 2>&1; then
     arch64="yes"
 else
     arch64="no"
 fi
 
-printf " Please select your OS: \n\n"
-echo " 1. FreeBSD 10, 11"
-echo " 2. SLES 12"
-echo " 3. Alpine 3.3"
-echo " 4. Fedora 24, 26"
-echo " 5. Gentoo"
-echo " 6. Other"
-echo ""
-printf " ==> "
+os="alpine33"
+check_packages
 
-read line
-line=`echo $line | sed 's/^\(.\).*/\1/'`
-
-echo ""
-
-case $line in
-    # FreeBSD 10
-    1)
-        os="freebsd"
-
-        install_warn1
-        check_packages
-
-        test "${found_python}" = "no" && ${sudo_cmd} pkg install python
-        test "${found_git}" = "no" && ${sudo_cmd} pkg install git
-        test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
-        ;;
-    # SLES 12
-    2)
-        os="sles12"
-
-        install_warn1
-        check_packages
-
-        test "${found_python}" = "no" && ${sudo_cmd} zypper install python
-        test "${found_python_dev}" = "no" && ${sudo_cmd} zypper install python-dev
-        test "${found_git}" = "no" && ${sudo_cmd} zypper install git
-        test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
-        ;;
-    # Alpine 3.3
-    3)
-        os="alpine33"
-
-        install_warn1
-        check_packages
-
-        test "${found_python}" = "no" && ${sudo_cmd} apk add --no-cache python
-        test "${found_python_dev}" = "no" && ${sudo_cmd} apk add --no-cache python-dev
-        test "${found_python}" = "no" && ${sudo_cmd} apk add --no-cache py-configobj
-        test "${found_git}" = "no" && ${sudo_cmd} apk add --no-cache git
-        ${sudo} apk add --no-cache util-linux procps
-        test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
-        test "${found_gcc}" = "no" && ${sudo_cmd} apk add --no-cache gcc musl-dev linux-headers
-        ;;
-    # Fedora 24
-    4)
-        os="fedora"
-
-        install_warn1
-        check_packages
-
-        test "${found_python}" = "no" && ${sudo_cmd} dnf -y install python && py_command="python2.7"
-        test "${found_python_dev}" = "no" && ${sudo_cmd} dnf -y install python-devel
-        test "${found_git}" = "no" && ${sudo_cmd} dnf -y install git
-        test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
-        test "${found_gcc}" = "no" && ${sudo_cmd} dnf -y install gcc redhat-rpm-config procps
-        ;;
-    # Gentoo
-    5)
-        os="gentoo"
-
-        install_warn1
-        check_packages
-
-        test "${found_python}" = "no" && ${sudo_cmd} emerge dev-lang/python:2.7 && py_command="python2.7"
-        test "${found_git}" = "no" && ${sudo_cmd} emerge dev-cvs/git
-        test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} emerge net-misc/wget
-        test "${found_gcc}" = "no" && ${sudo_cmd} emerge sys-devel/gcc
-        ;;
-    6)
-        echo "Before continuing with this installation script, please make sure that"
-        echo "the following extra packages are installed on your system: git, python 2.6 or 2.7,"
-        echo "python-dev, wget and gcc. Please install them manually if needed."
-        echo ""
-        printf "Continue (y/n)? "
-        read line
-        echo ""
-        test "${line}" = "y" -o "${line}" = "Y" || \
-            exit 1
-        ;;
-    *)
-        echo "Unrecognized option, exiting."
-        echo ""
-        exit 1
-esac
+test "${found_python}" = "no" && ${sudo_cmd} apk add --no-cache python
+test "${found_python_dev}" = "no" && ${sudo_cmd} apk add --no-cache python-dev
+test "${found_python}" = "no" && ${sudo_cmd} apk add --no-cache py-configobj
+test "${found_git}" = "no" && ${sudo_cmd} apk add --no-cache git
+${sudo} apk add --no-cache util-linux procps
+test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
+test "${found_gcc}" = "no" && ${sudo_cmd} apk add --no-cache gcc musl-dev linux-headers
 
 if command -V curl >/dev/null 2>&1; then
     downloader="curl -fs -O"
@@ -296,7 +201,7 @@ if ! grep ${amplify_user} /etc/passwd >/dev/null 2>&1; then
     if [ "${os}" = "freebsd" ]; then
         ${sudo_cmd} pw user add ${amplify_user}
     else
-        ${sudo_cmd} useradd ${amplify_user}
+        ${sudo_cmd} adduser ${amplify_user}
     fi
 fi
 
