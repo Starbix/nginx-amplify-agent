@@ -195,27 +195,18 @@ ${sudo_cmd} rm -f ${agent_conf_file}
 ${sudo_cmd} sh -c "sed -e 's/api_key.*$/api_key = $api_key/' ${agent_conf_file}.default > ${agent_conf_file}"
 ${sudo_cmd} chmod 644 ${agent_conf_file}
 
-detect_amplify_user
 
-if ! grep ${amplify_user} /etc/passwd >/dev/null 2>&1; then
-    if [ "${os}" = "freebsd" ]; then
-        ${sudo_cmd} pw user add ${amplify_user}
-    else
-        ${sudo_cmd} adduser ${amplify_user}
-    fi
-fi
-
-${sudo_cmd} chown ${amplify_user} ${agent_conf_path} >/dev/null 2>&1
-${sudo_cmd} chown ${amplify_user} ${agent_conf_file} >/dev/null 2>&1
+${sudo_cmd} chown ${UID}:${GID} ${agent_conf_path} >/dev/null 2>&1
+${sudo_cmd} chown ${UID}:${GID} ${agent_conf_file} >/dev/null 2>&1
 
 # Create directories for the agent in /var/log and /var/run
 ${sudo_cmd} mkdir -p /var/log/amplify-agent
 ${sudo_cmd} chmod 755 /var/log/amplify-agent
-${sudo_cmd} chown ${amplify_user} /var/log/amplify-agent
+${sudo_cmd} chown ${UID}:${GID} /var/log/amplify-agent
 
 ${sudo_cmd} mkdir -p /var/run/amplify-agent
 ${sudo_cmd} chmod 755 /var/run/amplify-agent
-${sudo_cmd} chown ${amplify_user} /var/run/amplify-agent
+${sudo_cmd} chown ${UID}:${GID} /var/run/amplify-agent
 
 echo ""
 echo " --- Finished successfully! --- "
