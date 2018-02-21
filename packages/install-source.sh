@@ -8,16 +8,13 @@ nginx_conf_file="/nginx/conf/nginx.conf"
 
 set -e
 
-# install_warn1 () {
-#     echo "The script will install git, python, python-dev, wget and possibly some other"
-#     echo "additional packages unless already found on this system."
-#     echo ""
-#     printf "Continue (y/n)? "
-#     read line
-#     test "${line}" = "y" -o "${line}" = "Y" || \
-#         exit 1
-#     echo ""
-# }
+install_warn1 () {
+    echo "The script will install git, python, python-dev, wget and possibly some other"
+    echo "additional packages unless already found on this system."
+    echo ""
+    printf "Continuing"
+    echo ""
+}
 
 check_packages () {
     printf 'Checking if python 2.6 or 2.7 exists ... '
