@@ -4,20 +4,20 @@ pip_url="https://bootstrap.pypa.io/get-pip.py"
 agent_url="https://github.com/nginxinc/nginx-amplify-agent"
 agent_conf_path="/etc/amplify-agent"
 agent_conf_file="${agent_conf_path}/agent.conf"
-nginx_conf_file="/etc/nginx/nginx.conf"
+nginx_conf_file="/nginx/conf/nginx.conf"
 
 set -e
 
-install_warn1 () {
-    echo "The script will install git, python, python-dev, wget and possibly some other"
-    echo "additional packages unless already found on this system."
-    echo ""
-    printf "Continue (y/n)? "
-    read line
-    test "${line}" = "y" -o "${line}" = "Y" || \
-        exit 1
-    echo ""
-}
+# install_warn1 () {
+#     echo "The script will install git, python, python-dev, wget and possibly some other"
+#     echo "additional packages unless already found on this system."
+#     echo ""
+#     printf "Continue (y/n)? "
+#     read line
+#     test "${line}" = "y" -o "${line}" = "Y" || \
+#         exit 1
+#     echo ""
+# }
 
 check_packages () {
     printf 'Checking if python 2.6 or 2.7 exists ... '
@@ -122,15 +122,15 @@ else
     fi
 fi
 
-if [ -n "$API_KEY" ]; then
-    api_key=$API_KEY
-else
-    echo " What's your API key? Please check the docs and the UI."
-    echo ""
-    printf " Enter your API key: "
-    read api_key
-    echo ""
-fi
+# if [ -n "$API_KEY" ]; then
+#     api_key=$API_KEY
+# else
+#     echo " What's your API key? Please check the docs and the UI."
+#     echo ""
+#     printf " Enter your API key: "
+#     read api_key
+#     echo ""
+# fi
 
 if uname -m | grep "_64" >/dev/null 2>&1; then
     arch64="yes"
@@ -147,8 +147,8 @@ echo " 5. Other"
 echo ""
 printf " ==> "
 
-read line
-line=`echo $line | sed 's/^\(.\).*/\1/'`
+# read line
+line=`echo 3 | sed 's/^\(.\).*/\1/'`
 
 echo ""
 
