@@ -37,12 +37,6 @@ def launch_method_supported(manager_type, ppid):
                 (manager_type, parent_command)
             )
             return False
-        if int(launcher_ppid) not in (0, 1):
-            context.log.debug(
-                'master process for %s is being skipped because its launcher (%s) is in a container' %
-                (manager_type, parent_command)
-            )
-            return False
     return True
 
 
