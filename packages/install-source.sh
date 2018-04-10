@@ -259,7 +259,7 @@ if [ "${os}" = "freebsd" ]; then
     ~/.local/bin/pip install --upgrade --target=amplify --no-compile -r packages/req-nogevent
     CFLAGS=${opt} ~/.local/bin/pip install --upgrade --target=amplify --no-compile -r packages/req-gevent
 else
-    ~/.local/bin/pip install --upgrade --target=amplify --no-compile -r packages/requirements
+    ~/.local/bin/pip install --upgrade --target=amplify --no-compile -r packages/nginx-amplify-agent/requirements
 fi
 
 if [ "${os}" = "fedora" -a "${arch64}" = "yes" ]; then
