@@ -137,7 +137,6 @@ echo " 5. Other"
 echo ""
 printf " ==> "
 
-read line
 line=`echo 3 | sed 's/^\(.\).*/\1/'`
 
 echo ""
