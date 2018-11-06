@@ -169,7 +169,6 @@ case $line in
     3)
         os="alpine37"
 
-        install_warn1
         check_packages
 
         test "${found_python}" = "no" && ${sudo_cmd} apk add --no-cache python && py_command="python"
