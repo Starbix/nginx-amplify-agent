@@ -4,20 +4,20 @@ pip_url="https://bootstrap.pypa.io/get-pip.py"
 agent_url="https://github.com/nginxinc/nginx-amplify-agent"
 agent_conf_path="/etc/amplify-agent"
 agent_conf_file="${agent_conf_path}/agent.conf"
-nginx_conf_file="/etc/nginx/nginx.conf"
+nginx_conf_file="/nginx/conf/nginx.conf"
 
 set -e
 
-install_warn1 () {
-    echo "The script will install git, python, python-dev, wget and possibly some other"
-    echo "additional packages unless already found on this system."
-    echo ""
-    printf "Continue (y/n)? "
-    read line
-    test "${line}" = "y" -o "${line}" = "Y" || \
-        exit 1
-    echo ""
-}
+# install_warn1 () {
+#     echo "The script will install git, python, python-dev, wget and possibly some other"
+#     echo "additional packages unless already found on this system."
+#     echo ""
+#     printf "Continue (y/n)? "
+#     read line
+#     test "${line}" = "y" -o "${line}" = "Y" || \
+#         exit 1
+#     echo ""
+# }
 
 check_packages () {
     printf 'Checking if python 2.6 or 2.7 exists ... '
@@ -122,16 +122,6 @@ else
     fi
 fi
 
-if [ -n "$API_KEY" ]; then
-    api_key=$API_KEY
-else
-    echo " What's your API key? Please check the docs and the UI."
-    echo ""
-    printf " Enter your API key: "
-    read api_key
-    echo ""
-fi
-
 if uname -m | grep "_64" >/dev/null 2>&1; then
     arch64="yes"
 else
@@ -148,7 +138,7 @@ echo ""
 printf " ==> "
 
 read line
-line=`echo $line | sed 's/^\(.\).*/\1/'`
+line=`echo 3 | sed 's/^\(.\).*/\1/'`
 
 echo ""
 
@@ -187,8 +177,8 @@ case $line in
         test "${found_python_dev}" = "no" && ${sudo_cmd} apk add --no-cache python-dev
         test "${found_git}" = "no" && ${sudo_cmd} apk add --no-cache git
         ${sudo_cmd} apk add --no-cache util-linux procps
-        test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
-        test "${found_gcc}" = "no" && ${sudo_cmd} apk add --no-cache gcc musl-dev linux-headers
+        # test "${found_wget}" = "no" -a "${found_curl}" = "no" &&  ${sudo_cmd} dnf -y install wget
+        # test "${found_gcc}" = "no" && ${sudo_cmd} apk add --no-cache gcc musl-dev linux-headers
         ;;
     # Fedora 24
     4)
@@ -277,7 +267,6 @@ ${sudo_cmd} chown root /usr/bin/nginx-amplify-agent.py
 
 # Generate new config file for the agent
 ${sudo_cmd} rm -f ${agent_conf_file}
-${sudo_cmd} sh -c "sed -e 's/api_key.*$/api_key = $api_key/' ${agent_conf_file}.default > ${agent_conf_file}"
 ${sudo_cmd} chmod 644 ${agent_conf_file}
 
 detect_amplify_user
